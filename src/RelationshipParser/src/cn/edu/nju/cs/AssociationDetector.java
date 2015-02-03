@@ -21,6 +21,8 @@ public class AssociationDetector {
     // xmi.id to java class name map object.
     // you can use this map object to convert xmi.id to java class name
     Map<String, String> idToName;
+    // xmi.id to class type map
+    Map<String, String> idToClassType;
     // record current UML:Association node xmi.id
     String currentAssociationXMIID;
 
@@ -33,6 +35,7 @@ public class AssociationDetector {
         document = XMIFileOpener.openJDOMDocument(filePath);
         // get the xmi.id to java class name map function
         idToName = XMIIDDetector.getIDtoNameMap(filePath);
+        idToClassType = XMIIDDetector.getIDtoClassTypeMap(filePath);
     }
 
     public static void detect(String filePath) {
@@ -57,6 +60,8 @@ public class AssociationDetector {
     void parseAssociationEndInstance(Element element) {
         assert (element.getName().equals("AssociationEnd"));
 
+        StringBuilder outputRecord = new StringBuilder("association");
+
         // Source Detection
         Element sourceClassElement = element.getChild("Feature.owner", UML_Namespace).getChild("Classifier", UML_Namespace);
         String sourceClassXMIID = sourceClassElement.getAttributeValue("xmi.idref");
@@ -69,7 +74,35 @@ public class AssociationDetector {
         String memberName = element.getAttributeValue("name");
         String visibility = element.getChild("AssociationEnd.visibility", UML_Namespace).getAttributeValue("xmi.value");
         String vMark = getVisibilityMark(visibility);
-        System.out.println(sourceClassName + "(" + vMark + memberName + ")" + " -> " + targetClassName + ", " + currentAssociationXMIID);
+
+
+        //MultiplicityRange
+        String range = "N/A";
+        try {
+            Element multiplicityRange = element.getDescendants(new ElementFilter("MultiplicityRange", UML_Namespace)).next();
+            System.out.println(multiplicityRange == null);
+            if (multiplicityRange != null) {
+                String lowerValue = "N/A";
+                String upperValue = "N/A";
+                if (multiplicityRange.getAttributeValue("lowerValue").length() > 0) {
+                    lowerValue = multiplicityRange.getAttributeValue("lowerValue");
+                }
+                if (multiplicityRange.getAttributeValue("upperValue").length() > 0) {
+                    upperValue = multiplicityRange.getAttributeValue("upperValue");
+                }
+                range = lowerValue + ".." + upperValue;
+            }
+        } catch (Exception e) {
+
+        }
+
+        //output Record
+        outputRecord.append("," + Utils.generateClassDescriptionString(sourceClassName, sourceClassXMIID, idToClassType.get(sourceClassXMIID)));
+        outputRecord.append("," + Utils.generateClassDescriptionString(targetClassName, targetClassXMIID, idToClassType.get(targetClassXMIID)));
+        outputRecord.append(", AssociationEndMark=" + vMark + memberName);
+        outputRecord.append(", MultiplicityRange=" + range);
+        System.out.println(outputRecord.toString());
+        //System.out.println(sourceClassName + "(" + vMark + memberName + ")" + " -> " + targetClassName + ", " + currentAssociationXMIID);
     }
 
     /**

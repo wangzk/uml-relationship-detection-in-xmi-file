@@ -31,6 +31,7 @@ public class XMIIDDetector {
     final static String CLASS = "UML:Class";
 
     public static HashMap<String, String> idToName = new HashMap();
+    public static HashMap<String, String> idToClassType = new HashMap();
 
     public static String currentPackageName = "";
 
@@ -80,7 +81,7 @@ public class XMIIDDetector {
     public static void navigateTree(org.w3c.dom.Node node, int depth) {
 
         if (node.getNodeName().equals(CLASS)) {
-            System.out.print("!");
+            //    System.out.print("!");
         }
         if (node.getNodeType() == Node.TEXT_NODE) {
 
@@ -105,7 +106,8 @@ public class XMIIDDetector {
                     // We have special treatment for UML:Class Node
                     if (node.getNodeName().equals(CLASS) || node.getNodeName().equals(INTERFACE)) {
                         newName = currentPackageName + "." + name.getNodeValue();
-                        System.out.println(newName);
+
+                        //         System.out.println(newName);
                     }
 
                 } else {
@@ -114,6 +116,11 @@ public class XMIIDDetector {
                     //	System.out.println(newName);
                 }
                 idToName.put(ID, newName);
+                if (node.getNodeName().equals(CLASS)) {
+                    idToClassType.put(ID, "Class");
+                } else if (node.getNodeName().equals(INTERFACE)) {
+                    idToClassType.put(ID, "Interface");
+                }
                 if (node.getNodeName().equals(PACKAGE)) {
                     String packageName = name.getNodeValue();
                     addPackagePath(packageName);
@@ -161,12 +168,9 @@ public class XMIIDDetector {
             DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
                                                                .newInstance();
             DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-            Document doc = docBuilder.parse(new File(FILE_ADDRESS));
-
-            System.out.println(" ========== Detect Class & Interface =========");
+            Document doc = docBuilder.parse(new File(filePath));
 
             navigateTree(doc, 0);
-            System.out.println(" ========== Done! =========");
             return idToName;
 
         } catch (SAXParseException err) {
@@ -183,6 +187,39 @@ public class XMIIDDetector {
         }
         return null;
     }
+
+    /**
+     * Get the XMI ID to Class Type(Class or Interface) HashMap data structure
+     *
+     * @param filePath model file path
+     * @return the map from XMI.ID to Class Type
+     */
+    public static Map<String, String> getIDtoClassTypeMap(String filePath) {
+        try {
+
+            DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
+                                                               .newInstance();
+            DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(new File(filePath));
+            navigateTree(doc, 0);
+            return idToClassType;
+
+        } catch (SAXParseException err) {
+            System.out.println("** Parsing error" + ", line "
+                                       + err.getLineNumber() + ", uri " + err.getSystemId());
+            System.out.println(" " + err.getMessage());
+
+        } catch (SAXException e) {
+            Exception x = e.getException();
+            ((x == null) ? e : x).printStackTrace();
+
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+        return null;
+    }
+
+
 
 
     public static void main(String[] args) {

@@ -59,4 +59,8 @@ public class Utils {
         }
         return null;
     }
+
+    public static String generateClassDescriptionString(String className, String classID, String classType) {
+        return className + "(" + classType + "|id = " + classID + ")";
+    }
 }
