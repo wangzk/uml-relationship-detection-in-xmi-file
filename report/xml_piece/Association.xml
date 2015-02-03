@@ -1,0 +1,54 @@
+<UML:Association name="" unSolvedFlag="false" version="0" xmi.id="3ib-49f900028386c6ebcaccc21d10b4c7ac">
+    <UML:ModelElement.namespace>
+        <UML:Namespace xmi.idref="x5 - impl"/>
+    </UML:ModelElement.namespace>
+    <UML:ModelElement.visibility xmi.value="public"/>
+    <UML:Association.connection>
+        <UML:AssociationEnd aggregation="none" changeability="changeable" isNavigable="false" name="" navigableType="non navigable" ordering="unordered" ownerScope="instance" targetScope="instance" unSolvedFlag="false" version="0" xmi.id="3id-49f900028386c6ebcaccc21d10b4c7ac">
+            <UML:ModelElement.namespace>
+                <UML:Namespace xmi.idref="x5 - impl"/>
+            </UML:ModelElement.namespace>
+            <UML:ModelElement.visibility xmi.value="private"/>
+            <UML:Feature.owner>
+                <UML:Classifier xmi.idref="32x - Logger"/>
+            </UML:Feature.owner>
+            <UML:Feature.visibility xmi.value="private"/>
+            <UML:StructuralFeature.multiplicity>
+                <UML:Multiplicity xmi.id="3ig-49f900028386c6ebcaccc21d10b4c7ac">
+                    <UML:Multiplicity.range>
+                        <UML:MultiplicityRange lowerValue="" upperValue="" xmi.id="3ih-49f900028386c6ebcaccc21d10b4c7ac"/>
+                    </UML:Multiplicity.range>
+                </UML:Multiplicity>
+            </UML:StructuralFeature.multiplicity>
+            <UML:AssociationEnd.participant>
+                <UML:Classifier xmi.idref="1fn - Log4JLogger"/>
+            </UML:AssociationEnd.participant>
+            <UML:AssociationEnd.association>
+                <UML:Association xmi.idref="3ib - [UML:Association]"/>
+            </UML:AssociationEnd.association>
+            <UML:AssociationEnd.visibility xmi.value="private"/>
+        </UML:AssociationEnd>
+        <UML:AssociationEnd aggregation="none" changeability="changeable" isNavigable="false" name="logger" navigableType="navigable" ordering="unordered" ownerScope="instance" targetScope="instance" unSolvedFlag="false" version="0" xmi.id="3ij-49f900028386c6ebcaccc21d10b4c7ac">
+            <UML:ModelElement.namespace>
+                <UML:Namespace xmi.idref="32v - log4j"/>
+            </UML:ModelElement.namespace>
+            <UML:ModelElement.visibility xmi.value="private"/>
+            <UML:Feature.owner>
+                <UML:Classifier xmi.idref="1fn - Log4JLogger"/>
+            </UML:Feature.owner>
+            <UML:Feature.visibility xmi.value="private"/>
+            <UML:AssociationEnd.participant>
+                <UML:Classifier xmi.idref="32x - Logger"/>
+            </UML:AssociationEnd.participant>
+            <UML:AssociationEnd.initialValue>
+                <UML:Expression xmi.id="1g9-49f900028386c6ebcaccc21d10b4c7ac">
+                    <UML:Expression.body>null</UML:Expression.body>
+                </UML:Expression>
+            </UML:AssociationEnd.initialValue>
+            <UML:AssociationEnd.association>
+                <UML:Association xmi.idref="3ib - [UML:Association]"/>
+            </UML:AssociationEnd.association>
+            <UML:AssociationEnd.visibility xmi.value="private"/>
+        </UML:AssociationEnd>
+    </UML:Association.connection>
+</UML:Association>
