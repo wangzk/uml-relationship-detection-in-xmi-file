@@ -1,7 +1,5 @@
 package cn.edu.nju.cs;
 
-import org.jdom2.Element;
-import org.jdom2.filter.Filter;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -20,8 +18,8 @@ public class Utils {
      */
     public static List<Node> filterTextNode(NodeList list) {
         LinkedList<Node> newList = new LinkedList<Node>();
-        for(int i = 0 ; i < list.getLength(); i++) {
-            if(!list.item(i).getNodeName().equals("#text")){
+        for (int i = 0; i < list.getLength(); i++) {
+            if (!list.item(i).getNodeName().equals("#text")) {
                 newList.add(list.item(i));
             }
         }
@@ -44,7 +42,7 @@ public class Utils {
         }
         */
         Node valueNode = attributes.getNamedItem(attribute);
-        if(valueNode != null)
+        if (valueNode != null)
             value = valueNode.getNodeValue();
         return value;
     }
@@ -52,18 +50,13 @@ public class Utils {
 
     public static Node getNodeByAttributeValue(Document doc, String tag, String attribute, String value) {
         NodeList list = doc.getElementsByTagName(tag);
-        for(int i = 0 ; i < list.getLength(); i++) {
+        for (int i = 0; i < list.getLength(); i++) {
             Node node = list.item(i);
-            if(Utils.getNodeAttributeValue(node,attribute) != null
-                    &&
-                    Utils.getNodeAttributeValue(node, attribute).equals(value))
+            if (Utils.getNodeAttributeValue(node, attribute) != null
+                        &&
+                        Utils.getNodeAttributeValue(node, attribute).equals(value))
                 return node;
         }
         return null;
     }
-
-    public static class XMIIDFilter extends org.jdom2.filter.AttributeFilter {
-
-    }
-
 }

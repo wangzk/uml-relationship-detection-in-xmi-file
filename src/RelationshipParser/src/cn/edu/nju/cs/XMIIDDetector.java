@@ -65,7 +65,7 @@ public class XMIIDDetector {
     public static void printDOM2XMLFile(Document doc, String filePath) {
         try {
             TransformerFactory transformerFactory = TransformerFactory
-                    .newInstance();
+                                                            .newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
             PrintStream outStream = new PrintStream(new File(filePath));
@@ -86,7 +86,7 @@ public class XMIIDDetector {
 
         } else {
             /*
-			for (int i = 0; i < depth; i++)
+            for (int i = 0; i < depth; i++)
 				System.out.print(" ");
 				*/
 
@@ -101,7 +101,7 @@ public class XMIIDDetector {
                 String ID = xmiID.getNodeValue();
                 if (name != null && name.getNodeValue().length() > 0) {
                     newName = xmiID.getNodeValue().split("-")[0] + " - "
-                            + name.getNodeValue();
+                                      + name.getNodeValue();
                     // We have special treatment for UML:Class Node
                     if (node.getNodeName().equals(CLASS) || node.getNodeName().equals(INTERFACE)) {
                         newName = currentPackageName + "." + name.getNodeValue();
@@ -110,7 +110,7 @@ public class XMIIDDetector {
 
                 } else {
                     newName = xmiID.getNodeValue().split("-")[0] + " - ["
-                            + parentName + "]";
+                                      + parentName + "]";
                     //	System.out.println(newName);
                 }
                 idToName.put(ID, newName);
@@ -149,11 +149,17 @@ public class XMIIDDetector {
         }
     }
 
+    /**
+     * Get the XMI ID to java class name HashMap data structure
+     *
+     * @param filePath model file path
+     * @return the map from XMI.ID to Java class name
+     */
     public static Map<String, String> getIDtoNameMap(String filePath) {
         try {
 
             DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
-                    .newInstance();
+                                                               .newInstance();
             DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(new File(FILE_ADDRESS));
 
@@ -165,7 +171,7 @@ public class XMIIDDetector {
 
         } catch (SAXParseException err) {
             System.out.println("** Parsing error" + ", line "
-                    + err.getLineNumber() + ", uri " + err.getSystemId());
+                                       + err.getLineNumber() + ", uri " + err.getSystemId());
             System.out.println(" " + err.getMessage());
 
         } catch (SAXException e) {
@@ -184,14 +190,14 @@ public class XMIIDDetector {
         try {
 
             DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
-                    .newInstance();
+                                                               .newInstance();
             DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(new File(FILE_ADDRESS));
             // normalize text representation
             // doc.getDocumentElement().normalize();
             System.out.println("==============================");
             System.out.println("Root element of the doc is "
-                    + doc.getDocumentElement().getNodeName());
+                                       + doc.getDocumentElement().getNodeName());
 
             NodeList listClass = doc.getElementsByTagName(CLASSES);
             int totalClass = listClass.getLength();
@@ -208,7 +214,7 @@ public class XMIIDDetector {
 
         } catch (SAXParseException err) {
             System.out.println("** Parsing error" + ", line "
-                    + err.getLineNumber() + ", uri " + err.getSystemId());
+                                       + err.getLineNumber() + ", uri " + err.getSystemId());
             System.out.println(" " + err.getMessage());
 
         } catch (SAXException e) {

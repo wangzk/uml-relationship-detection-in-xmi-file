@@ -14,7 +14,7 @@ public class XMIFileOpener {
     public static org.w3c.dom.Document open(String filePath) {
         try {
             DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
-                    .newInstance();
+                                                               .newInstance();
             DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
             org.w3c.dom.Document doc = docBuilder.parse(new File(filePath));
             return doc;
@@ -29,7 +29,7 @@ public class XMIFileOpener {
         try {
             org.jdom2.Document document = builder.build(new File(filePath));
             return document;
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
