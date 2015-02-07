@@ -6,6 +6,8 @@ import org.jdom2.Namespace;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.util.IteratorIterable;
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -25,26 +27,30 @@ public class AssociationDetector {
     Map<String, String> idToClassType;
     // record current UML:Association node xmi.id
     String currentAssociationXMIID;
+    PrintStream outputStream;
+    
 
     /**
      * filePath=model file path
      */
-    public AssociationDetector(String filePath) {
+    public AssociationDetector(String filePath, PrintStream outputStream) {
         this.filePath = filePath;
+        this.outputStream = outputStream;
         // open an JDOM document object to be parsed
         document = XMIFileOpener.openJDOMDocument(filePath);
         // get the xmi.id to java class name map function
         idToName = XMIIDDetector.getIDtoNameMap(filePath);
         idToClassType = XMIIDDetector.getIDtoClassTypeMap(filePath);
+        
     }
 
-    public static void detect(String filePath) {
-        AssociationDetector detector = new AssociationDetector(filePath);
+    public static void detect(String filePath, PrintStream stream) {
+        AssociationDetector detector = new AssociationDetector(filePath, stream);
         detector.detectAllAssociation();
     }
 
     public static void main(String[] args) {
-        AssociationDetector.detect("model.xml");
+        AssociationDetector.detect("model.xml", System.out);
     }
 
     String getVisibilityMark(String visilibity) {
@@ -73,8 +79,21 @@ public class AssociationDetector {
         // Additional info Detection
         String memberName = element.getAttributeValue("name");
         String visibility = element.getChild("AssociationEnd.visibility", UML_Namespace).getAttributeValue("xmi.value");
+        String aggregation = element.getAttributeValue("aggregation");
+        String navigableType = element.getAttributeValue("navigableType");
+        String ownerScope = element.getAttributeValue("ownerScope");
+        String targetScope = element.getAttributeValue("targetScope"); 
         String vMark = getVisibilityMark(visibility);
-
+        
+        // Get expression body
+        String expression  = "N/A";
+        try{
+        	Element expressionElement = element.getDescendants(new ElementFilter("Expression.body", UML_Namespace)).next();
+        	expression = expressionElement.getTextTrim();
+        }catch(Exception e) {
+        	
+        }
+        
 
         //MultiplicityRange
         String range = "N/A";
@@ -99,10 +118,18 @@ public class AssociationDetector {
         //output Record
         outputRecord.append("," + Utils.generateClassDescriptionString(sourceClassName, sourceClassXMIID, idToClassType.get(sourceClassXMIID)));
         outputRecord.append("," + Utils.generateClassDescriptionString(targetClassName, targetClassXMIID, idToClassType.get(targetClassXMIID)));
-        outputRecord.append(", AssociationEndMark=" + vMark + memberName);
-        outputRecord.append(", MultiplicityRange=" + range);
-        System.out.println(outputRecord.toString());
-        //System.out.println(sourceClassName + "(" + vMark + memberName + ")" + " -> " + targetClassName + ", " + currentAssociationXMIID);
+        outputRecord.append(",id=" + currentAssociationXMIID);
+        outputRecord.append(",name=" + memberName);
+        outputRecord.append(",visibility=" + visibility);
+        outputRecord.append(",aggregation=" + aggregation);
+        outputRecord.append(",navigableType=" + navigableType);
+        outputRecord.append(",ownerScope=" + ownerScope);
+        outputRecord.append(",targetScope=" + targetScope);
+        outputRecord.append(",initialValue=" + expression); 
+        
+        //outputRecord.append(",AssociationEndMark=" + vMark + memberName);
+        //outputRecord.append(",MultiplicityRange=" + range);
+        outputStream.println(outputRecord.toString());
     }
 
     /**
