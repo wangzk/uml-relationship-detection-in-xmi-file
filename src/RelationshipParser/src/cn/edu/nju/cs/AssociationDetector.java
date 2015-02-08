@@ -82,7 +82,8 @@ public class AssociationDetector {
         String aggregation = element.getAttributeValue("aggregation");
         String navigableType = element.getAttributeValue("navigableType");
         String ownerScope = element.getAttributeValue("ownerScope");
-        String targetScope = element.getAttributeValue("targetScope"); 
+        String targetScope = element.getAttributeValue("targetScope");
+        String staticLabel = (targetScope.equals("classifier")?"true":"false");
         String vMark = getVisibilityMark(visibility);
         
         // Get expression body
@@ -97,22 +98,8 @@ public class AssociationDetector {
 
         //MultiplicityRange
         String range = "N/A";
-        try {
-            Element multiplicityRange = element.getDescendants(new ElementFilter("MultiplicityRange", UML_Namespace)).next();
-            System.out.println(multiplicityRange == null);
-            if (multiplicityRange != null) {
-                String lowerValue = "N/A";
-                String upperValue = "N/A";
-                if (multiplicityRange.getAttributeValue("lowerValue").length() > 0) {
-                    lowerValue = multiplicityRange.getAttributeValue("lowerValue");
-                }
-                if (multiplicityRange.getAttributeValue("upperValue").length() > 0) {
-                    upperValue = multiplicityRange.getAttributeValue("upperValue");
-                }
-                range = lowerValue + ".." + upperValue;
-            }
-        } catch (Exception e) {
-
+        if(element.getChild("StructuralFeature.multiplicity", UML_Namespace) != null) {
+        	range="*";
         }
 
         //output Record
@@ -123,9 +110,13 @@ public class AssociationDetector {
         outputRecord.append(",visibility=" + visibility);
         outputRecord.append(",aggregation=" + aggregation);
         outputRecord.append(",navigableType=" + navigableType);
-        outputRecord.append(",ownerScope=" + ownerScope);
-        outputRecord.append(",targetScope=" + targetScope);
-        outputRecord.append(",initialValue=" + expression); 
+        //outputRecord.append(",ownerScope=" + ownerScope);
+        //outputRecord.append(",targetScope=" + targetScope);
+        outputRecord.append(",static=" + staticLabel);
+        outputRecord.append(",initialValue=" + expression);
+        outputRecord.append(",range=" + range);
+        
+        
         
         //outputRecord.append(",AssociationEndMark=" + vMark + memberName);
         //outputRecord.append(",MultiplicityRange=" + range);

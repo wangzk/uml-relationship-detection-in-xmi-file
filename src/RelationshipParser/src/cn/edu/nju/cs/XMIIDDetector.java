@@ -22,7 +22,7 @@ public class XMIIDDetector {
 
     final static String ATTRIBUTES = "UML:Attribute";
     final static String METHODS = "UML:Operation";
-    final static String CLASSES = "UML:Classifier.feature"; // masih salah
+    final static String CLASSES = "UML:Classifier.feature";
     final static String COUPLINGS = "UML:AssociationEnd";
     final static String CLASS_INHERITANCES = "UML:GeneralizableElement.generalization";
     final static String FILE_ADDRESS = "model.xml";
@@ -54,9 +54,13 @@ public class XMIIDDetector {
      * after calling this function, currentPackageName will become "a.b"
      */
     public static void upPackagePath() {
-        int pos = currentPackageName.lastIndexOf('.');
+    	// remove the tailing symbol
+    	currentPackageName = currentPackageName.substring(0, currentPackageName.length() - 1);
+        int pos1 = currentPackageName.lastIndexOf('.');
+        int pos2 = currentPackageName.lastIndexOf('$');
+        int pos = (pos1 > pos2)? pos1 : pos2;
         if (pos > 0) {
-            currentPackageName = currentPackageName.substring(0, pos);
+            currentPackageName = currentPackageName.substring(0, pos + 1);
         } else {
             currentPackageName = "";
         }
@@ -105,9 +109,8 @@ public class XMIIDDetector {
                                       + name.getNodeValue();
                     // We have special treatment for UML:Class Node
                     if (node.getNodeName().equals(CLASS) || node.getNodeName().equals(INTERFACE)) {
-                        newName = currentPackageName + "." + name.getNodeValue();
-
-                        //         System.out.println(newName);
+                    		newName = currentPackageName + name.getNodeValue();
+                            //System.out.println("Found Class: " + newName);
                     }
 
                 } else {
@@ -118,12 +121,16 @@ public class XMIIDDetector {
                 idToName.put(ID, newName);
                 if (node.getNodeName().equals(CLASS)) {
                     idToClassType.put(ID, "Class");
+                    currentPackageName = newName + "$";
                 } else if (node.getNodeName().equals(INTERFACE)) {
                     idToClassType.put(ID, "Interface");
+                    currentPackageName = newName + "$";
                 }
                 if (node.getNodeName().equals(PACKAGE)) {
                     String packageName = name.getNodeValue();
-                    addPackagePath(packageName);
+                    
+                    currentPackageName = currentPackageName + packageName + ".";
+                    //System.out.println("In Package: " + currentPackageName);
                 }
             }
         }
@@ -136,6 +143,9 @@ public class XMIIDDetector {
 
         if (node.getNodeName().equals(PACKAGE)) {
             upPackagePath();
+        }
+        if (node.getNodeName().equals(CLASS) || node.getNodeName().equals(INTERFACE)) {
+           upPackagePath();
         }
     }
 
