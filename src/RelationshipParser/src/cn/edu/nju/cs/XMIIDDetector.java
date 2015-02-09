@@ -118,18 +118,24 @@ public class XMIIDDetector {
                                       + parentName + "]";
                     //	System.out.println(newName);
                 }
-                idToName.put(ID, newName);
+                idToName.put(ID, "");
                 if (node.getNodeName().equals(CLASS)) {
                     idToClassType.put(ID, "Class");
                     currentPackageName = newName + "$";
+                    idToName.put(ID, newName);
+
                 } else if (node.getNodeName().equals(INTERFACE)) {
                     idToClassType.put(ID, "Interface");
                     currentPackageName = newName + "$";
+                    idToName.put(ID, newName);
+
                 }
                 if (node.getNodeName().equals(PACKAGE)) {
                     String packageName = name.getNodeValue();
                     
                     currentPackageName = currentPackageName + packageName + ".";
+                    idToName.put(ID, newName);
+
                     //System.out.println("In Package: " + currentPackageName);
                 }
             }
