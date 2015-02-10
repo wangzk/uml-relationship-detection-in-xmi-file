@@ -69,7 +69,7 @@ public class ParameterDetector {
 			String typeID = parameterType.getChild("Classifier", UML_Namespace)
 					.getAttributeValue("xmi.idref");
 			String className = idToName.get(typeID);
-			if(className.startsWith("java")) continue;
+			if(className.startsWith("java") && className.charAt(4) == '.') continue;
 			if(className.length() < 1) continue;
 			outputStream.println("parameter," + toClassDescriptionString(currentClassID) + ","
 					+ toClassDescriptionString(typeID) + ", operationID="

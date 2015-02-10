@@ -75,7 +75,8 @@ public class NestedDetector {
     		String calleeClassType = idToClassType.get(calleeXMIID);
     		String calleeClassString = Utils.generateClassDescriptionString(calleeClassName, calleeXMIID, calleeClassType);
     		outputRecord.append("," + callerClassString + "," + calleeClassString);
-    		outputStream.println(outputRecord.toString());    		
+    		//if(!callerClassString.startsWith("java"))
+    			outputStream.println(outputRecord.toString());    		
     	}
     }
 
