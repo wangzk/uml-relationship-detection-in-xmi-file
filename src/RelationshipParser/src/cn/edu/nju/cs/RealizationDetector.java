@@ -102,14 +102,13 @@ public class RealizationDetector
                 .getChild("ModelElement", JUDE_Namespace);
         String supplierClassXMIID = supplierClassElement.getAttributeValue("xmi.idref");
         
-        StringBuilder outputRecord = new StringBuilder("usage");
-        outputRecord.append("," + parseStereotype(stereotypeXMIID));
+        StringBuilder outputRecord = new StringBuilder("realization");
         outputRecord.append("," + parseClassInfo(clientClassXMIID));
         outputRecord.append("," + parseClassInfo(supplierClassXMIID));
         outputRecord.append(",id=" + currentUsageXMIID);
         outputRecord.append(",visibility=" + visibility);
        
-        System.out.println(outputRecord.toString());
+      //  System.out.println(outputRecord.toString());
         outputStream.println(outputRecord.toString());
     }
     
