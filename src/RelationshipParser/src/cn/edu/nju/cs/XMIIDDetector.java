@@ -118,7 +118,7 @@ public class XMIIDDetector {
                                       + parentName + "]";
                     //	System.out.println(newName);
                 }
-                idToName.put(ID, "");
+                idToName.put(ID, newName);
                 if (node.getNodeName().equals(CLASS)) {
                     idToClassType.put(ID, "Class");
                     currentPackageName = newName + "$";
