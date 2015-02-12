@@ -102,8 +102,8 @@ public class RealizationDetector
                 .getChild("ModelElement", JUDE_Namespace);
         String supplierClassXMIID = supplierClassElement.getAttributeValue("xmi.idref");
         
-        StringBuilder outputRecord = new StringBuilder("usage");
-        outputRecord.append("," + parseStereotype(stereotypeXMIID));
+        StringBuilder outputRecord = new StringBuilder("");
+        outputRecord.append(parseStereotype(stereotypeXMIID));
         outputRecord.append("," + parseClassInfo(clientClassXMIID));
         outputRecord.append("," + parseClassInfo(supplierClassXMIID));
         outputRecord.append(",id=" + currentUsageXMIID);

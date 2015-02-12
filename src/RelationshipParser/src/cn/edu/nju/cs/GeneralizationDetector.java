@@ -95,7 +95,7 @@ public class GeneralizationDetector
         outputRecord.append(",id=" + currentUsageXMIID);
         outputRecord.append(",visibility=" + visibility);
         
-        System.out.println(outputRecord.toString());
+       // System.out.println(outputRecord.toString());
         outputStream.println(outputRecord.toString());
     }
     
